@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Login & Signup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; cursor: none; }
+        .cursor { position: absolute; width: 30px; height: 30px; border: 2px solid white; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); transition: transform 0.1s; }
+        .container { width: 350px; padding: 40px; border-radius: 10px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); text-align: center; }
+        h2 { margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { font-size: 14px; }
+        .input-group input { width: 100%; padding: 10px; border: none; border-radius: 5px; background: rgba(255, 255, 255, 0.2); color: white; outline: none; }
+        .btn { width: 100%; padding: 10px; background: #ffcc00; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; color: black; margin-top: 10px; }
+        .btn:hover { background: white; }
+        .switch, a { color: #ffcc00; text-decoration: none; font-size: 12px; display: block; margin-top: 10px; cursor: pointer; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="container">
+        <div id="login-box">
+            <h2>Faculty Login</h2>
+            <div class="input-group">
+                <label>Email ID</label>
+                <input type="email" id="login-email" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="login-password" required>
+            </div>
+            <a href="/faculty-dashboard">Forgot Password?</a>
+            <button class="btn" onclick="login()">Login</button>
+            <button class="btn hidden" id="continue-btn">Continue</button>
+            <a class="switch" onclick="toggleForm()">New user? Signup here</a>
+        </div>
+
+        <div id="signup-box" class="hidden">
+            <h2>Faculty Signup</h2>
+            <div class="input-group">
+                <label>Name</label>
+                <input type="text" id="signup-name" required>
+            </div>
+            <div class="input-group">
+                <label>Email ID</label>
+                <input type="email" id="signup-email" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="signup-password" required>
+            </div>
+            <div class="input-group">
+                <label>Favorite Color</label>
+                <input type="text" id="signup-color" required>
+            </div>
+            <button class="btn" onclick="signup()">Signup</button>
+            <a href="">Already have an account? Login</a>
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('click', () => {
+            cursor.style.transform = 'scale(1.5)';
+            setTimeout(() => { cursor.style.transform = 'scale(1)'; }, 150);
+        });
+
+        function toggleForm() {
+            document.getElementById("login-box").classList.toggle("hidden");
+            document.getElementById("signup-box").classList.toggle("hidden");
+        }
+
+        function login() {
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+            if (email && password) {
+                localStorage.setItem("isLoggedIn", "true");
+                alert("Login Successful!");
+                checkLogin();
+            } else {
+                alert("Please enter email and password.");
+            }
+        }
+
+        function signup() {
+            const name = document.getElementById("signup-name").value;
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
+            const color = document.getElementById("signup-color").value;
+            if (name && email && password && color) {
+                localStorage.setItem("isLoggedIn", "true");
+                alert("Signup Successful! You can now login.");
+                toggleForm();
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            document.getElementById("continue-btn").style.display = isLoggedIn === "true" ? "block" : "none";
+        }
+
+        checkLogin();
+    </script>
+</body>
+</html>
