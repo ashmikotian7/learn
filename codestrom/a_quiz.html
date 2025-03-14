@@ -32,20 +32,27 @@
             <!-- Questions will be inserted dynamically -->
         </div>
 
-        <button class="btn" onclick="submitQuiz()">Submit Quiz</button>
+        <button class="btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
         <p class="score" id="scoreDisplay"></p>
-        <button class="back-btn" onclick="goBack()">Back to Student Dashboard</button>
+        <button class="btn" onclick="window.location.href='student_dashboard.html'">Back To Student Dashboard</button>
     </div>
 
     <script>
         let countdown;
+        const quizKey = "quizSubmitted"; // Local storage key
         const questions = [
             { question: "What is 5 + 3?", options: ["6", "8", "9"], answer: "8" },
             { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus"], answer: "Mars" }
         ];
         const quizDeadline = new Date("2025-03-20T23:59:59"); 
-        
+
         function loadQuiz() {
+            if (localStorage.getItem(quizKey)) {
+                document.getElementById("questions").innerHTML = "<p style='color: red; font-weight: bold;'>Quiz already submitted!</p>";
+                document.getElementById("submitBtn").style.display = "none";
+                return;
+            }
+
             document.getElementById("quizTitle").textContent = "Mathematics Quiz";
             const questionContainer = document.getElementById("questions");
             questionContainer.innerHTML = "";
@@ -54,9 +61,9 @@
                 let html = `<div class="question">
                                 <p>Q${index + 1}: ${q.question}</p>`;
                 q.options.forEach(option => {
-                    html += <input type="radio" name="q${index}" value="${option}"> ${option}<br>;
+                    html += `<input type="radio" name="q${index}" value="${option}"> ${option}<br>`;
                 });
-                html += </div>;
+                html += `</div>`;
                 questionContainer.innerHTML += html;
             });
 
@@ -70,7 +77,7 @@
             countdown = setInterval(() => {
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = Math.floor(timeLeft % 60);
-                timerElement.textContent = Time left: ${minutes}m ${seconds}s;
+                timerElement.textContent = `Time left: ${minutes}m ${seconds}s`;
 
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
@@ -82,22 +89,31 @@
         }
 
         function submitQuiz() {
+            if (localStorage.getItem(quizKey)) {
+                alert("Quiz already submitted!");
+                return;
+            }
+
             clearInterval(countdown);
             let score = 0;
             
             questions.forEach((q, index) => {
-                let selectedOption = document.querySelector(input[name="q${index}"]:checked);
+                let selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
                 if (selectedOption && selectedOption.value === q.answer) {
                     score++;
                 }
             });
-            
-            document.getElementById("scoreDisplay").textContent = Your Score: ${score} / ${questions.length};
-            alert("Quiz submitted successfully! Your score: " + score);
-        }
 
-        function goBack() {
-            window.location.href = "student_dashboard.html";
+            document.getElementById("scoreDisplay").textContent = `Your Score: ${score} / ${questions.length}`;
+            alert(`Quiz submitted successfully! Your score: ${score}`);
+
+            // Store submission status in localStorage
+            localStorage.setItem(quizKey, "true");
+
+            // Redirect to student dashboard after showing the score
+            setTimeout(() => {
+                window.location.href = "student_dashboard.html";
+            }, 2000);
         }
 
         window.onload = loadQuiz;

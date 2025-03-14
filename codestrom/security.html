@@ -35,7 +35,13 @@
             transition: 0.3s;
         }
         .btn:hover { background: #e6b800; }
-        .access-list { margin-top: 20px; text-align: left; padding: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 5px; }
+        .access-list { 
+            margin-top: 20px; 
+            text-align: left; 
+            padding: 10px; 
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 5px; 
+        }
         .back-btn {
             background: #ff5733;
             color: white;
@@ -54,27 +60,33 @@
         <input type="text" id="quizTitle" placeholder="Enter Quiz Title">
         <button class="btn" onclick="grantAccess()">Grant Access</button>
         <div class="access-list" id="accessList">No access records.</div>
-        <button class="back-btn" onclick="goBack()">Back to Admin Dashboard</button>
+        <button class="btn back-btn" onclick="clearAccessList()">Clear Access Records</button>
+        <button class="btn" type="submit" name="login" onclick="location.href='admin_dashboard.html'">Back To Dashboard</button>
     </div>
 
     <script>
         function grantAccess() {
             let student = document.getElementById("studentName").value.trim();
             let quiz = document.getElementById("quizTitle").value.trim();
+            
             if (!student || !quiz) {
-                alert("Please enter both student name and quiz title.");
+                alert("❌ Please enter both student name and quiz title.");
                 return;
             }
             
             let attempts = JSON.parse(localStorage.getItem("attempts")) || {};
+            
             if (attempts[student] && attempts[student][quiz]) {
-                alert("Access Denied: Multiple attempts are restricted!");
+                alert("❌ Access Denied: Multiple attempts are restricted!");
                 return;
             }
             
+            // Granting access
             if (!attempts[student]) attempts[student] = {};
             attempts[student][quiz] = true;
             localStorage.setItem("attempts", JSON.stringify(attempts));
+
+            alert(`✅ Access granted to ${student} for quiz: ${quiz}`);
             loadAccessList();
         }
 
@@ -83,14 +95,17 @@
             let accessList = document.getElementById("accessList");
             
             let listHTML = Object.keys(attempts).map(student => 
-                <p>${student} - Attempted quizzes: ${Object.keys(attempts[student]).join(", ")}</p>
+                `<p><strong>${student}</strong> - Attempted quizzes: ${Object.keys(attempts[student]).join(", ")}</p>`
             ).join("") || "No access records.";
             
             accessList.innerHTML = listHTML;
         }
 
-        function goBack() {
-            window.location.href = "admin_dashboard.html";
+        function clearAccessList() {
+            if (confirm("Are you sure you want to clear all access records?")) {
+                localStorage.removeItem("attempts");
+                loadAccessList();
+            }
         }
 
         window.onload = loadAccessList;
