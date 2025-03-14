@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password - Quiz Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 350px;
+            padding: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            color: black;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: white;
+        }
+
+        a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-size: 12px;
+            display: block;
+            margin-top: 10px;
+        }
+
+        /* Navbar */
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffcc00;
+            transition: 0.3s;
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 10px #ffcc00;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .nav-item:hover {
+            color: #ffcc00;
+        }
+
+        /* Responsive Navbar */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <h1 class="logo">Quiz Management</h1>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="faculty-login.html" class="nav-item">Faculty</a>
+            <a href="admin-login.html" class="nav-item">Admin</a>
+            <a href="student-login.html" class="nav-item">Student</a>
+            <a href="contact.html" class="nav-item">Contact Us</a>
+        </div>
+    </nav>
+    
+    <!-- Forgot Password Section -->
+    <div class="container">
+        <h2>Forgot Password</h2>
+        <p>Enter your email address to reset your password.</p>
+        <div class="input-group">
+            <label>Email ID</label>
+            <input type="email" id="reset-email" required>
+        </div>
+        <button class="btn" onclick="resetPassword()">Submit</button>
+        <a href="faculty-login.html">Back to Login</a>
+    </div>
+
+    <script>
+        function resetPassword() {
+            const email = document.getElementById("reset-email").value;
+            if (email) {
+                alert("If this email is registered, you'll receive a password reset link.");
+            } else {
+                alert("Please enter your email.");
+            }
+        }
+    </script>
+</body>
+</html>

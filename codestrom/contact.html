@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Quiz Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; cursor: none; }
+        body { background: #0f172a; color: white; overflow-x: hidden; position: relative; }
+
+        /* Custom Cursor */
+        .cursor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Background Animation */
+        .background-animate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(0,0,0,0.6), rgba(15, 23, 42, 0.9));
+            animation: backgroundFade 10s infinite alternate;
+        }
+        @keyframes backgroundFade {
+            0% { background: radial-gradient(circle, rgba(0,0,0,0.6), rgba(15, 23, 42, 0.9)); }
+            100% { background: radial-gradient(circle, rgba(0,0,0,0.8), rgba(15, 23, 42, 1)); }
+        }
+
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 10px; margin: 20px; }
+        .logo { font-size: 22px; font-weight: bold; color: #ffcc00; transition: 0.3s; }
+        .logo:hover { text-shadow: 0 0 10px #ffcc00; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-item { color: white; text-decoration: none; transition: 0.3s; font-size: 16px; }
+        .nav-item:hover { color: #ffcc00; }
+
+        /* Contact Section */
+        .contact-section {
+            text-align: center;
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .contact-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        .contact-container h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            animation: glow 2s infinite alternate;
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .input-field {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+        .input-field::placeholder { color: rgba(255, 255, 255, 0.7); font-size: 14px; }
+        .submit-button {
+            background: #ffcc00;
+            color: black;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        .submit-button:hover { background: white; color: black; }
+
+        /* Footer */
+        footer { text-align: center; padding: 15px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); margin-top: 20px; font-size: 13px; }
+
+        /* Animations */
+        @keyframes glow { 0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); } 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 1); } }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="background-animate"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <h1 class="logo">Quiz Management</h1>
+        <div class="nav-links">
+            <a href="/" class="nav-item">Home</a>
+            <a href="faculty-login.html" class="nav-item">Faculty</a>
+            <a href="admin-login.html" class="nav-item">Admin</a>
+            <a href="student-login.html" class="nav-item">Student</a>
+            <a href="contact.html" class="nav-item">Contact Us</a>
+        </div>
+    </nav>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="contact-container">
+            <h2>Contact Us</h2>
+            <form action="https://api.web3forms.com/submit" method="POST" id="contact-form">
+                <input type="hidden" name="access_key" value="9751b6a2-f8dd-4c84-8849-89fdf34d83a6">
+                <input type="text" class="input-field" placeholder="Your Name" required>
+                <input type="email" class="input-field" placeholder="Your Email" required>
+                <textarea class="input-field" placeholder="Your Message" rows="3" required></textarea>
+                <button type="submit" class="submit-button">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Contact Us: quizmanagement@example.com</p>
+    </footer>
+
+    <script>
+        // Cursor Effect
+        const cursor = document.querySelector(".cursor");
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+    </script>
+</body>
+</html>

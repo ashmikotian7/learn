@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login & Signup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; flex-direction: column; height: 100vh; overflow: hidden; cursor: none; }
+
+        /* Navbar */
+        .navbar { 
+            width: 100%; 
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 15px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            backdrop-filter: blur(10px);
+            position: fixed; 
+            top: 0; 
+            left: 0;
+        }
+        .logo { font-size: 22px; font-weight: bold; color: #ffcc00; transition: 0.3s; }
+        .logo:hover { text-shadow: 0 0 10px #ffcc00; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-item { color: white; text-decoration: none; transition: 0.3s; font-size: 16px; }
+        .nav-item:hover { color: #ffcc00; }
+
+        .cursor { position: absolute; width: 30px; height: 30px; border: 2px solid white; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); transition: transform 0.1s; }
+
+        .container { 
+            width: 350px; 
+            padding: 40px; 
+            border-radius: 10px; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px); 
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); 
+            text-align: center; 
+            margin-top: 80px;
+        }
+
+        h2 { margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { font-size: 14px; }
+        .input-group input { width: 100%; padding: 10px; border: none; border-radius: 5px; background: rgba(255, 255, 255, 0.2); color: white; outline: none; }
+
+        .btn { 
+            width: 100%; 
+            padding: 10px; 
+            background: #ffcc00; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            color: black; 
+            margin-top: 10px; 
+        }
+        .btn:hover { background: white; }
+
+        .switch, a { color: #ffcc00; text-decoration: none; font-size: 12px; display: block; margin-top: 10px; cursor: pointer; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <h1 class="logo">Quiz Management</h1>
+        <div class="nav-links">
+            <a href="home.html" class="nav-item">Home</a>
+            <a href="faculty-login.html" class="nav-item">Faculty</a>
+            <a href="admin-login.html" class="nav-item">Admin</a>
+            <a href="student-login.html" class="nav-item">Student</a>
+            <a href="contact.html" class="nav-item">Contact Us</a>
+        </div>
+    </div>
+
+    <div class="cursor"></div>
+
+    <div class="container">
+        <div id="login-box">
+            <h2>Admin Login</h2>
+            <div class="input-group">
+                <label>Email ID</label>
+                <input type="email" id="admin-login-email" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="admin-login-password" required>
+            </div>
+            <a href="af.html">Forgot Password?</a>
+            <button class="btn" onclick="adminLogin()">Login</button>
+            <button class="btn hidden" id="admin-continue-btn">Continue</button>
+            <a class="switch" onclick="toggleForm()">New admin? Signup here</a>
+        </div>
+
+        <div id="signup-box" class="hidden">
+            <h2>Admin Signup</h2>
+            <div class="input-group">
+                <label>Name</label>
+                <input type="text" id="admin-signup-name" required>
+            </div>
+            <div class="input-group">
+                <label>Email ID</label>
+                <input type="email" id="admin-signup-email" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="admin-signup-password" required>
+            </div>
+            <div class="input-group">
+                <label>Favorite Color</label>
+                <input type="text" id="admin-signup-color" required>
+            </div>
+            <button class="btn" onclick="adminSignup()">Signup</button>
+            <a onclick="toggleForm()">Already have an account? Login</a>
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('click', () => {
+            cursor.style.transform = 'scale(1.5)';
+            setTimeout(() => { cursor.style.transform = 'scale(1)'; }, 150);
+        });
+
+        function toggleForm() {
+            document.getElementById("login-box").classList.toggle("hidden");
+            document.getElementById("signup-box").classList.toggle("hidden");
+        }
+
+        function adminLogin() {
+            const email = document.getElementById("admin-login-email").value;
+            const password = document.getElementById("admin-login-password").value;
+            if (email && password) {
+                localStorage.setItem("adminIsLoggedIn", "true");
+                alert("Login Successful!");
+                checkAdminLogin();
+            } else {
+                alert("Please enter email and password.");
+            }
+        }
+
+        function adminSignup() {
+            const name = document.getElementById("admin-signup-name").value;
+            const email = document.getElementById("admin-signup-email").value;
+            const password = document.getElementById("admin-signup-password").value;
+            const color = document.getElementById("admin-signup-color").value;
+            if (name && email && password && color) {
+                localStorage.setItem("adminIsLoggedIn", "true");
+                alert("Signup Successful! You can now login.");
+                toggleForm();
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+
+        function checkAdminLogin() {
+            const isLoggedIn = localStorage.getItem("adminIsLoggedIn");
+            const continueBtn = document.getElementById("admin-continue-btn");
+            if (continueBtn) {
+                continueBtn.style.display = isLoggedIn === "true" ? "block" : "none";
+            }
+        }
+
+        checkAdminLogin();
+    </script>
+
+</body>
+</html>
