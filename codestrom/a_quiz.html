@@ -39,16 +39,16 @@
 
     <script>
         let countdown;
-        const quizKey = "quizSubmitted"; // Local storage key
+        const quizKey = "quizAttempted"; // Key for tracking quiz attempts in session storage
         const questions = [
             { question: "What is 5 + 3?", options: ["6", "8", "9"], answer: "8" },
             { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus"], answer: "Mars" }
         ];
-        const quizDeadline = new Date("2025-03-20T23:59:59"); 
+        const quizDuration = 5 * 60; // 5 minutes in seconds
 
         function loadQuiz() {
-            if (localStorage.getItem(quizKey)) {
-                document.getElementById("questions").innerHTML = "<p style='color: red; font-weight: bold;'>Quiz already submitted!</p>";
+            if (sessionStorage.getItem(quizKey)) {
+                document.getElementById("questions").innerHTML = "<p style='color: red; font-weight: bold;'>You have already attempted this quiz!</p>";
                 document.getElementById("submitBtn").style.display = "none";
                 return;
             }
@@ -67,7 +67,7 @@
                 questionContainer.innerHTML += html;
             });
 
-            startTimer((quizDeadline - new Date()) / 1000);
+            startTimer(quizDuration);
         }
 
         function startTimer(duration) {
@@ -89,8 +89,8 @@
         }
 
         function submitQuiz() {
-            if (localStorage.getItem(quizKey)) {
-                alert("Quiz already submitted!");
+            if (sessionStorage.getItem(quizKey)) {
+                alert("You have already attempted this quiz!");
                 return;
             }
 
@@ -107,8 +107,8 @@
             document.getElementById("scoreDisplay").textContent = `Your Score: ${score} / ${questions.length}`;
             alert(`Quiz submitted successfully! Your score: ${score}`);
 
-            // Store submission status in localStorage
-            localStorage.setItem(quizKey, "true");
+            // Store submission status in sessionStorage to prevent reattempt during same session
+            sessionStorage.setItem(quizKey, "true");
 
             // Redirect to student dashboard after showing the score
             setTimeout(() => {
