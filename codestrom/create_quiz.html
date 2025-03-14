@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; text-align: center; padding: 40px; }
+
+        .container {
+            width: 50%;
+            max-width: 550px;
+            margin: auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover { transform: scale(1.02); }
+
+        h2 { margin-bottom: 20px; font-size: 26px; color: #ffcc00; }
+
+        .input-box {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .input-box label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+            font-size: 16px;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        input:focus, select:focus { background: rgba(255, 255, 255, 0.3); }
+        input::placeholder { color: rgba(255, 255, 255, 0.7); }
+
+        .checkbox-group {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            accent-color: #ffcc00;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn:hover { 
+            background: white; 
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create a New Quiz</h2>
+
+        <div class="input-box">
+            <label for="quizTitle">Quiz Title</label>
+            <input type="text" id="quizTitle" placeholder="Enter Quiz Title">
+        </div>
+
+        <div class="input-box">
+            <label for="quizDeadline">Quiz Deadline</label>
+            <input type="datetime-local" id="quizDeadline">
+        </div>
+
+        <div class="input-box">
+            <label>Select Department</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" value="CSE"> CSE</label>
+                <label><input type="checkbox" value="ICE"> ICE</label>
+                <label><input type="checkbox" value="MECH"> MECH</label>
+            </div>
+        </div>
+
+        <div class="input-box">
+            <label>Select Section</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" value="A"> A</label>
+                <label><input type="checkbox" value="B"> B</label>
+                <label><input type="checkbox" value="C"> C</label>
+            </div>
+        </div>
+
+        <div class="input-box">
+            <label>Quiz Type</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" value="MCQ"> MCQ</label>
+                <label><input type="checkbox" value="Short"> Short Answer</label>
+                <label><input type="checkbox" value="TrueFalse"> True/False</label>
+            </div>
+        </div>
+
+        <button class="btn" onclick="saveQuiz()">Create Quiz</button>
+    </div>
+
+    <script>
+        function saveQuiz() {
+            let title = document.getElementById("quizTitle").value;
+            let deadline = document.getElementById("quizDeadline").value;
+            let types = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+                            .map(cb => cb.value);
+
+            let departments = Array.from(document.querySelectorAll(".input-box:nth-child(4) input[type='checkbox']:checked"))
+                                  .map(cb => cb.value);
+
+            let sections = Array.from(document.querySelectorAll(".input-box:nth-child(5) input[type='checkbox']:checked"))
+                                .map(cb => cb.value);
+
+            if (!title || !deadline || departments.length === 0 || sections.length === 0 || types.length === 0) {
+                alert("Please fill all fields and select at least one option in each category.");
+                return;
+            }
+
+            let quiz = { title, deadline, departments, sections, types };
+            let quizzes = JSON.parse(localStorage.getItem("quizzes")) || [];
+            quizzes.push(quiz);
+            localStorage.setItem("quizzes", JSON.stringify(quizzes));
+
+            window.location.href = "add_quesstions.html"; 
+        }
+    </script>
+</body>
+</html>

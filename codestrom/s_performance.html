@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Summary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif; 
+        }
+
+        body { 
+            background: linear-gradient(135deg, #1e3c72, #2a5298); 
+            text-align: center; 
+            color: white; 
+            padding: 40px;
+        }
+
+        .container { 
+            width: 50%; 
+            max-width: 600px; 
+            margin: auto; 
+            padding: 25px; 
+            background: rgba(255, 255, 255, 0.15); 
+            border-radius: 15px; 
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover { transform: scale(1.02); }
+
+        h2 { 
+            color: #ffcc00; 
+            margin-bottom: 15px; 
+            font-size: 28px;
+        }
+
+        .score-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .score-item {
+            background: rgba(255, 255, 255, 0.2); 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin: 10px 0; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            font-size: 18px;
+            font-weight: 500;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .back-btn {
+            background: #ffcc00;
+            color: #333;
+            margin-top: 15px;
+        }
+
+        .back-btn:hover { background: white; transform: scale(1.05); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Performance Summary 📊</h2>
+        <ul id="performanceList" class="score-list">No scores yet.</ul>
+        <button class="btn" type="submit" name="login" onclick="location.href='faculty_dashboard.html'">Back To Dashboard</button>
+    </div>
+
+    <script>
+        function loadPerformance() {
+            let scores = JSON.parse(localStorage.getItem("scores")) || [];
+            let performanceList = document.getElementById("performanceList");
+
+            performanceList.innerHTML = scores.length 
+                ? scores.map(s => <li class="score-item">📌 ${s}</li>).join("")
+                : "<p>No scores yet.</p>";
+        }
+
+        
+
+        window.onload = loadPerformance;
+    </script>
+</body>
+</html>

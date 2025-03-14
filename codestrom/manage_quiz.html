@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Quizzes</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f4; 
+            padding: 20px;
+        }
+
+        .container { 
+            width: 50%; 
+            margin: auto; 
+            padding: 20px; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px gray; 
+        }
+
+        h2 { color: #333; }
+
+        .btn {
+            width: auto;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .back-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+
+        .quiz-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Manage Quizzes</h2>
+        <div id="quizList"></div>
+        <button class="btn back-btn" onclick="goToDashboard()">Go Back to Admin Dashboard</button>
+    </div>
+
+    <script>
+        function loadQuizzes() {
+            let quizzes = JSON.parse(localStorage.getItem("quizzes")) || [];
+            let quizList = document.getElementById("quizList");
+
+            quizList.innerHTML = quizzes.length ? 
+                quizzes.map((q, index) => `
+                    <div class="quiz-item">
+                        <span>${q.title} - Deadline: ${q.deadline}</span> 
+                        <button class="btn delete-btn" onclick="deleteQuiz(${index})">Delete</button>
+                    </div>
+                `).join("") :
+                "<p>No quizzes available.</p>";
+        }
+
+        function deleteQuiz(index) {
+            let quizzes = JSON.parse(localStorage.getItem("quizzes")) || [];
+            quizzes.splice(index, 1);
+            localStorage.setItem("quizzes", JSON.stringify(quizzes));
+            loadQuizzes();
+        }
+
+        function goToDashboard() {
+            window.location.href = "admin_dashboard.html"; 
+        }
+
+        window.onload = loadQuizzes;
+    </script>
+</body>
+</html>

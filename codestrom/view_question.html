@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Questions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; text-align: center; padding: 40px; }
+        .container {
+            width: 60%;
+            max-width: 700px;
+            margin: auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        h2 { color: #ffcc00; margin-bottom: 20px; }
+        .question-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+            position: relative;
+        }
+        .btn {
+            padding: 10px 15px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: white; transform: scale(1.05); }
+        .delete-btn {
+            background: red;
+            color: white;
+            padding: 8px 12px;
+            font-size: 12px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border-radius: 5px;
+        }
+        .delete-btn:hover { background: darkred; }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>View Questions</h2>
+        <div id="questionsList"></div>
+        <div class="btn-container">
+            <button class="btn" onclick="redirectToAttempt()">Start Quiz</button>
+            <button class="btn" onclick="goBack()">Go Back to Add Questions</button>
+        </div>
+    </div>
+
+    <script>
+        function loadQuestions() {
+            let questions = JSON.parse(localStorage.getItem("questions")) || [];
+            let questionsList = document.getElementById("questionsList");
+            questionsList.innerHTML = "";
+
+            if (questions.length === 0) {
+                questionsList.innerHTML = "<p>No questions available.</p>";
+                return;
+            }
+
+            questions.forEach((q, index) => {
+                let questionDiv = document.createElement("div");
+                questionDiv.className = "question-box";
+                questionDiv.innerHTML = `
+                    <p><strong>Q${index + 1}:</strong> ${q.question} (${q.type})</p>
+                    ${q.type === "MCQ" ? `<p>Options: ${q.options.join(", ")}</p>` : ""}
+                    <p><strong>Answer:</strong> ${q.correctAnswer}</p>
+                    <button class="btn delete-btn" onclick="deleteQuestion(${index})">Delete</button>
+                `;
+                questionsList.appendChild(questionDiv);
+            });
+        }
+
+        function deleteQuestion(index) {
+            let questions = JSON.parse(localStorage.getItem("questions")) || [];
+            questions.splice(index, 1);
+            localStorage.setItem("questions", JSON.stringify(questions));
+            loadQuestions();
+        }
+
+        function redirectToAttempt() {
+            window.location.href = "assign_quiz.html";
+        }
+
+        function goBack() {
+            window.location.href = "add_quesstions.html";
+        }
+
+        window.onload = loadQuestions;
+    </script>
+</body>
+</html>

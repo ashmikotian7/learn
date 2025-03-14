@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; text-align: center; padding: 40px; }
+        .container {
+            width: 60%;
+            max-width: 700px;
+            margin: auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        h2 { color: #ffcc00; margin-bottom: 20px; }
+        .question-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Assign or Submit Quiz</h2>
+        <div id="questionsList"></div>
+
+        <button class="btn" onclick="submitQuiz()">Submit Quiz</button>
+    </div>
+
+    <script>
+        function loadQuestions() {
+            let questions = JSON.parse(localStorage.getItem("questions")) || [];
+            let questionsList = document.getElementById("questionsList");
+            questionsList.innerHTML = "";
+
+            if (questions.length === 0) {
+                questionsList.innerHTML = "<p>No questions available.</p>";
+                return;
+            }
+
+            questions.forEach((q, index) => {
+                let questionHtml = `<div class="question-box">
+                    <p><strong>Q${index + 1}:</strong> ${q.question} (${q.type})</p>`;
+
+                if (q.type === "MCQ") {
+                    questionHtml += `<p>Options: ${q.options.join(", ")}</p>`;
+                }
+                questionHtml += `<p><strong>Answer:</strong> ${q.correctAnswer}</p></div>`;
+                questionsList.innerHTML += questionHtml;
+            });
+        }
+
+        function submitQuiz() {
+            if (confirm("Are you sure you want to submit this quiz?")) {
+                localStorage.setItem("quizReady", "true");
+                alert("Quiz is now ready for students!");
+                window.location.href = "view_question.html";  // Redirect to the view questions page
+            }
+        }
+
+        window.onload = loadQuestions;
+    </script>
+</body>
+</html>

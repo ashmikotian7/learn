@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Responses</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f4; 
+            padding: 20px;
+        }
+
+        .container { 
+            width: 50%; 
+            margin: auto; 
+            padding: 20px; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px gray; 
+        }
+
+        h2 { color: #333; }
+
+        .response-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            width: auto;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Student Responses</h2>
+        <div id="responseList">No responses yet.</div>
+        <button class="btn" type="submit" name="login" onclick="location.href='faculty_dashboard.html'">Back To Faculty</button>
+    </div>
+
+    <script>
+        function loadResponses() {
+            let responses = JSON.parse(localStorage.getItem("responses")) || [];
+            let responseList = document.getElementById("responseList");
+
+            responseList.innerHTML = responses.length 
+                ? responses.map(r => <div class="response-item">${r}</div>).join("")
+                : "<p>No responses yet.</p>";
+        }
+
+        
+
+        window.onload = loadResponses;
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Quiz List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 20px; text-align: center; }
+        
+        .navbar { 
+            width: 100%; 
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 15px 30px; 
+            position: fixed; 
+            top: 0; 
+            left: 0;
+            color: #ffcc00;
+            font-size: 20px;
+        }
+
+        .container { 
+            width: 80%; 
+            margin: 100px auto; 
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 30px; 
+            border-radius: 15px; 
+            backdrop-filter: blur(10px); 
+        }
+
+        h2 { color: #ffcc00; }
+        
+        .quiz-list { margin-top: 20px; }
+        .quiz-item { 
+            padding: 15px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 10px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Faculty Quiz List</h2>
+    </div>
+
+    <div class="container">
+        <h2>Available Quizzes</h2>
+        <div class="quiz-list" id="quiz-list">
+            <p>No quizzes available.</p>
+        </div>
+    </div>
+
+    <script>
+        function loadQuizzes() {
+            let quizzes = JSON.parse(localStorage.getItem("quizzes")) || [];
+            let quizList = document.getElementById("quiz-list");
+            quizList.innerHTML = "";
+
+            if (quizzes.length === 0) {
+                quizList.innerHTML = "<p>No quizzes available.</p>";
+                return;
+            }
+
+            quizzes.forEach((quiz, index) => {
+                let formattedDate = new Date(quiz.deadline).toLocaleString('en-US', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+
+                let quizItem = document.createElement("div");
+                quizItem.classList.add("quiz-item");
+                quizItem.innerHTML = `
+                    <h3>${quiz.title}</h3>
+                    <p>Deadline: ${formattedDate}</p>
+                    <p>Types: ${quiz.types.map(type => type.toUpperCase()).join(', ')}</p>
+                    <p>Departments: ${quiz.departments.join(', ')}</p>
+                    <p>Sections: ${quiz.sections.join(', ')}</p>
+                    <p>Time Limit: ${quiz.time} mins</p>
+                    <button class="btn" onclick="viewQuestions(${index})">View Questions</button>
+                `;
+                quizList.appendChild(quizItem);
+            });
+        }
+
+        function viewQuestions(index) {
+            localStorage.setItem("selectedQuizIndex", index);
+            window.location.href = "view_questions.html";
+        }
+
+        window.onload = loadQuizzes;
+    </script>
+</body>
+</html>

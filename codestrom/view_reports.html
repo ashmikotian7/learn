@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Reports</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; text-align: center; padding: 40px; }
+        .container {
+            width: 60%;
+            max-width: 700px;
+            margin: auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        h2 { color: #ffcc00; margin-bottom: 20px; }
+        .report-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        .btn:hover { background: white; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Quiz Reports</h2>
+        <div id="reportsList"></div>
+        <button class="btn" onclick="window.location.href='manage_quiz.html'">Back to Quizzes</button>
+    </div>
+
+    <script>
+        function loadReports() {
+            let reports = JSON.parse(localStorage.getItem("quizReports")) || [];
+            let reportsListDiv = document.getElementById("reportsList");
+            reportsListDiv.innerHTML = "";
+
+            if (reports.length === 0) {
+                reportsListDiv.innerHTML = "<p>No quiz reports available.</p>";
+                return;
+            }
+
+            reports.forEach((report, index) => {
+                reportsListDiv.innerHTML += `
+                    <div class="report-box">
+                        <p><strong>Student:</strong> ${report.studentName}</p>
+                        <p><strong>Quiz Title:</strong> ${report.quizTitle}</p>
+                        <p><strong>Score:</strong> ${report.score}/${report.totalQuestions}</p>
+                        <p><strong>Percentage:</strong> ${((report.score / report.totalQuestions) * 100).toFixed(2)}%</p>
+                        <p><strong>Date:</strong> ${report.date}</p>
+                    </div>
+                `;
+            });
+        }
+
+        window.onload = loadReports;
+    </script>
+</body>
+</html>

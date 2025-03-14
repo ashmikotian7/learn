@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f4; 
+            padding: 20px;
+        }
+
+        .container { 
+            width: 50%; 
+            margin: auto; 
+            padding: 20px; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px gray; 
+        }
+
+        h2 { color: #333; }
+
+        input, select { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border: 1px solid gray; 
+            border-radius: 5px; 
+        }
+
+        .btn {
+            width: auto;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .add-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .add-btn:hover {
+            background: #218838;
+        }
+
+        .back-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Manage Teachers & Students</h2>
+        <input type="text" id="name" placeholder="Enter Name">
+        <select id="role">
+            <option value="Teacher">Teacher</option>
+            <option value="Student">Student</option>
+        </select>
+        <button class="btn add-btn" onclick="addUser()">Add User</button>
+
+        <h3>Registered Users</h3>
+        <div id="userList"></div>
+
+        <button class="btn back-btn" onclick="goToDashboard()">Back to Admin Dashboard</button>
+    </div>
+
+    <script>
+        function addUser() {
+            let name = document.getElementById("name").value.trim();
+            let role = document.getElementById("role").value;
+
+            if (name === "") {
+                alert("Please enter a valid name.");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            users.push({ name, role });
+            localStorage.setItem("users", JSON.stringify(users));
+            loadUsers();
+        }
+
+        function loadUsers() {
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            let userList = document.getElementById("userList");
+
+            userList.innerHTML = users.length 
+                ? users.map((user, index) => `
+                    <div class="user-item">
+                        <span>${user.name} - ${user.role}</span>
+                        <button class="btn delete-btn" onclick="deleteUser(${index})">Delete</button>
+                    </div>
+                `).join("") 
+                : "<p>No users registered.</p>";
+        }
+
+        function deleteUser(index) {
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            users.splice(index, 1);
+            localStorage.setItem("users", JSON.stringify(users));
+            loadUsers();
+        }
+
+        function goToDashboard() {
+            window.location.href = "admin_dashboard.html"; 
+        }
+
+        window.onload = loadUsers;
+    </script>
+</body>
+</html>

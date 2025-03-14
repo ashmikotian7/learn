@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Questions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; text-align: center; padding: 40px; }
+        .container {
+            width: 50%;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        h2 { margin-bottom: 20px; font-size: 26px; color: #ffcc00; }
+        .input-box { margin: 15px 0; text-align: left; }
+        .input-box label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        textarea, input, select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+            font-size: 16px;
+            text-align: center;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover { background: white; transform: scale(1.05); }
+        .option-group { display: none; }
+        .back-btn {
+            width: 200px;
+            background: #ffcc00;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .back-btn:hover { background: white; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="goBack()">← Back to Faculty Dashboard</button>
+        
+        <h2>Add Question</h2>
+
+        <div class="input-box">
+            <label for="questionType">Select Question Type</label>
+            <select id="questionType" onchange="toggleOptions()">
+                <option value="">-- Select --</option>
+                <option value="MCQ">Multiple Choice</option>
+                <option value="Short">Short Answer</option>
+                <option value="TrueFalse">True/False</option>
+            </select>
+        </div>
+
+        <div id="questionSection" style="display: none;">
+            <div class="input-box">
+                <label for="questionText">Enter Question</label>
+                <textarea id="questionText" placeholder="Enter your question"></textarea>
+            </div>
+
+            <div class="option-group" id="mcqOptions">
+                <label>Option 1</label>
+                <input type="text" id="option1" placeholder="Enter option 1">
+                <label>Option 2</label>
+                <input type="text" id="option2" placeholder="Enter option 2">
+                <label>Option 3</label>
+                <input type="text" id="option3" placeholder="Enter option 3">
+                <label>Option 4</label>
+                <input type="text" id="option4" placeholder="Enter option 4">
+                <label>Correct Answer</label>
+                <input type="text" id="correctAnswerMCQ" placeholder="Enter correct answer">
+            </div>
+
+            <div class="option-group" id="trueFalseOptions">
+                <label>Correct Answer</label>
+                <select id="correctAnswerTF">
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+
+            <div class="option-group" id="shortAnswerOptions">
+                <label>Correct Answer</label>
+                <input type="text" id="correctAnswerShort" placeholder="Enter correct answer">
+            </div>
+
+            <button class="btn" onclick="addQuestion()">Add Question</button>
+            <button class="btn" onclick="saveAndRedirect()">Save & Redirect</button>
+            <button class="btn" onclick="viewQuestions()">View Questions</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleOptions() {
+            let type = document.getElementById("questionType").value;
+            document.getElementById("questionSection").style.display = type ? "block" : "none";
+            document.getElementById("mcqOptions").style.display = type === "MCQ" ? "block" : "none";
+            document.getElementById("trueFalseOptions").style.display = type === "TrueFalse" ? "block" : "none";
+            document.getElementById("shortAnswerOptions").style.display = type === "Short" ? "block" : "none";
+        }
+
+        function addQuestion() {
+            let type = document.getElementById("questionType").value;
+            let question = document.getElementById("questionText").value;
+            if (!type || !question) {
+                alert("Please enter a question and select a type.");
+                return;
+            }
+
+            let questions = JSON.parse(localStorage.getItem("questions")) || [];
+            let newQuestion = { question, type };
+
+            if (type === "MCQ") {
+                newQuestion.options = [
+                    document.getElementById("option1").value,
+                    document.getElementById("option2").value,
+                    document.getElementById("option3").value,
+                    document.getElementById("option4").value
+                ];
+                newQuestion.correctAnswer = document.getElementById("correctAnswerMCQ").value;
+            } else if (type === "TrueFalse") {
+                newQuestion.correctAnswer = document.getElementById("correctAnswerTF").value;
+            } else if (type === "Short") {
+                newQuestion.correctAnswer = document.getElementById("correctAnswerShort").value;
+            }
+
+            questions.push(newQuestion);
+            localStorage.setItem("questions", JSON.stringify(questions));
+
+            alert("Question added!");
+            document.getElementById("questionText").value = "";
+            document.getElementById("questionType").value = "";
+            document.getElementById("questionSection").style.display = "none";
+        }
+
+        function saveAndRedirect() {
+            addQuestion();
+            window.location.href = "view_question.html";
+        }
+
+        function viewQuestions() {
+            window.location.href = "view_question.html";
+        }
+
+        function goBack() {
+            window.location.href = "faculty_dashboard.html";  
+        }
+    </script>
+</body>
+</html>

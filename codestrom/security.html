@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Security</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; text-align: center; padding: 20px; }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        h2 { color: #ffcc00; }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        input { background: white; color: black; }
+        .btn {
+            background: #ffcc00;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #e6b800; }
+        .access-list { margin-top: 20px; text-align: left; padding: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 5px; }
+        .back-btn {
+            background: #ff5733;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .back-btn:hover { background: #cc4625; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Quiz Security & Integrity</h2>
+        <input type="text" id="studentName" placeholder="Enter Student Name">
+        <input type="text" id="quizTitle" placeholder="Enter Quiz Title">
+        <button class="btn" onclick="grantAccess()">Grant Access</button>
+        <div class="access-list" id="accessList">No access records.</div>
+        <button class="back-btn" onclick="goBack()">Back to Admin Dashboard</button>
+    </div>
+
+    <script>
+        function grantAccess() {
+            let student = document.getElementById("studentName").value.trim();
+            let quiz = document.getElementById("quizTitle").value.trim();
+            if (!student || !quiz) {
+                alert("Please enter both student name and quiz title.");
+                return;
+            }
+            
+            let attempts = JSON.parse(localStorage.getItem("attempts")) || {};
+            if (attempts[student] && attempts[student][quiz]) {
+                alert("Access Denied: Multiple attempts are restricted!");
+                return;
+            }
+            
+            if (!attempts[student]) attempts[student] = {};
+            attempts[student][quiz] = true;
+            localStorage.setItem("attempts", JSON.stringify(attempts));
+            loadAccessList();
+        }
+
+        function loadAccessList() {
+            let attempts = JSON.parse(localStorage.getItem("attempts")) || {};
+            let accessList = document.getElementById("accessList");
+            
+            let listHTML = Object.keys(attempts).map(student => 
+                <p>${student} - Attempted quizzes: ${Object.keys(attempts[student]).join(", ")}</p>
+            ).join("") || "No access records.";
+            
+            accessList.innerHTML = listHTML;
+        }
+
+        function goBack() {
+            window.location.href = "admin_dashboard.html";
+        }
+
+        window.onload = loadAccessList;
+    </script>
+</body>
+</html>

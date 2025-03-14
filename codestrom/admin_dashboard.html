@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #74EBD5 0%, #9FACE6 100%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: #fff;
+        }
+        h2 { font-size: 2em; margin-bottom: 20px; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #ffcc00;
+            color: #333;
+            transform: translateY(-3px);
+        }
+        .profile {
+            margin-bottom: 20px;
+        }
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+        }
+        .profile h3 { margin: 10px 0 5px; }
+        .profile p { font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile">
+            <img src="admin-avatar.png" alt="Admin Profile">
+            <h3>Admin Name</h3>
+            <p>Email: admin@example.com</p>
+        </div>
+        <h2>Admin Dashboard</h2>
+        <a href="manage_users.html" class="btn">Manage Teachers & Students</a>
+        <a href="manage_quiz.html" class="btn">Manage Quiz</a>
+        <a href="view_reports.html" class="btn">View Reports</a>
+        <a href="security.html" class="btn">security</a>
+        <a href="logout.html" class="btn">Logout</a>
+    </div>
+</body>
+</html>

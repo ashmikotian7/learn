@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attempt Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; padding: 20px; text-align: center; }
+        
+        .container { max-width: 600px; margin: auto; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .title { font-size: 24px; font-weight: bold; color: #ffcc00; }
+        .timer { font-size: 18px; font-weight: bold; color: red; text-align: right; }
+        
+        .question { margin-top: 20px; text-align: left; }
+        .btn { width: 100%; padding: 10px; background: #ffcc00; border: none; cursor: pointer; font-size: 16px; margin-top: 20px; }
+        .btn:hover { background: white; }
+        
+        .score { font-size: 20px; font-weight: bold; color: #ffcc00; margin-top: 20px; }
+        .back-btn { background: #ff5733; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; padding: 10px; border: none; border-radius: 5px; }
+        .back-btn:hover { background: #cc4625; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="title" id="quizTitle">Quiz Title</h2>
+        <p class="timer" id="timer"></p>
+
+        <div id="questions">
+            <!-- Questions will be inserted dynamically -->
+        </div>
+
+        <button class="btn" onclick="submitQuiz()">Submit Quiz</button>
+        <p class="score" id="scoreDisplay"></p>
+        <button class="back-btn" onclick="goBack()">Back to Student Dashboard</button>
+    </div>
+
+    <script>
+        let countdown;
+        const questions = [
+            { question: "What is 5 + 3?", options: ["6", "8", "9"], answer: "8" },
+            { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Venus"], answer: "Mars" }
+        ];
+        const quizDeadline = new Date("2025-03-20T23:59:59"); 
+        
+        function loadQuiz() {
+            document.getElementById("quizTitle").textContent = "Mathematics Quiz";
+            const questionContainer = document.getElementById("questions");
+            questionContainer.innerHTML = "";
+            
+            questions.forEach((q, index) => {
+                let html = `<div class="question">
+                                <p>Q${index + 1}: ${q.question}</p>`;
+                q.options.forEach(option => {
+                    html += <input type="radio" name="q${index}" value="${option}"> ${option}<br>;
+                });
+                html += </div>;
+                questionContainer.innerHTML += html;
+            });
+
+            startTimer((quizDeadline - new Date()) / 1000);
+        }
+
+        function startTimer(duration) {
+            let timeLeft = duration;
+            const timerElement = document.getElementById("timer");
+
+            countdown = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = Math.floor(timeLeft % 60);
+                timerElement.textContent = Time left: ${minutes}m ${seconds}s;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    submitQuiz();
+                }
+
+                timeLeft--;
+            }, 1000);
+        }
+
+        function submitQuiz() {
+            clearInterval(countdown);
+            let score = 0;
+            
+            questions.forEach((q, index) => {
+                let selectedOption = document.querySelector(input[name="q${index}"]:checked);
+                if (selectedOption && selectedOption.value === q.answer) {
+                    score++;
+                }
+            });
+            
+            document.getElementById("scoreDisplay").textContent = Your Score: ${score} / ${questions.length};
+            alert("Quiz submitted successfully! Your score: " + score);
+        }
+
+        function goBack() {
+            window.location.href = "student_dashboard.html";
+        }
+
+        window.onload = loadQuiz;
+    </script>
+
+</body>
+</html>

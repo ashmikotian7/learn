@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: white; padding: 20px; }
+
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; padding: 15px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 20px; }
+        .logo { font-size: 22px; font-weight: bold; color: #ffcc00; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-size: 16px; }
+        .nav-links a:hover { color: #ffcc00; }
+
+        /* Quiz List */
+        .quiz-container { background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px; }
+        .quiz-item { padding: 15px; margin-bottom: 10px; background: rgba(255, 255, 255, 0.2); border-radius: 5px; cursor: pointer; }
+        .quiz-item:hover { background: rgba(255, 255, 255, 0.3); }
+        .quiz-title { font-size: 18px; font-weight: bold; }
+        .quiz-deadline { font-size: 14px; color: #ffcc00; }
+
+        /* Quiz Modal */
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60%; background: white; color: black; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .modal-header { display: flex; justify-content: space-between; }
+        .modal-close { cursor: pointer; font-size: 20px; font-weight: bold; }
+        .question { margin-bottom: 15px; }
+        .btn { padding: 10px; background: #ffcc00; border: none; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .btn:hover { background: white; }
+        .timer { font-size: 18px; font-weight: bold; color: red; }
+
+        /* Hide quiz modal */
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1 class="logo">Quiz Management</h1>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </nav>
+
+    <h2>Welcome, <span id="studentName">Student</span></h2>
+    <p>Select a quiz to attempt before the deadline.</p>
+
+    <div class="quiz-container">
+        <div class="quiz-item" onclick="startQuiz('Quiz 1', '2025-03-20T23:59:59')">
+            <a href="a_quiz.html" class="quiz-link">
+                <span class="quiz-title">Quiz 1: Mathematics</span>
+                <span class="quiz-deadline">Deadline: March 20, 2025</span>
+            </a>
+        </div>
+    </div>
+    
+        <div class="quiz-item" onclick="startQuiz('Quiz 2', '2025-03-25T23:59:59')">
+            <span class="quiz-title">Quiz 2: Science</span>
+            <span class="quiz-deadline">Deadline: March 25, 2025</span>
+        </div>
+    </div>
+
+    <div class="modal hidden" id="quizModal">
+        <div class="modal-header">
+            <h2 id="quizTitle">Quiz</h2>
+            <span class="modal-close" onclick="closeQuiz()">×</span>
+        </div>
+        <p class="timer" id="timer"></p>
+
+        <div class="question">
+            <p>Q1: What is 2 + 2?</p>
+            <input type="radio" name="q1" value="3"> 3<br>
+            <input type="radio" name="q1" value="4"> 4<br>
+            <input type="radio" name="q1" value="5"> 5
+        </div>
+
+        <button class="btn" onclick="submitQuiz()">Submit</button>
+    </div>
+
+    <script>
+        let countdown;
+
+        // Fetch and display student name (simulate fetching from backend or localStorage)
+        function loadStudentName() {
+            let studentName = localStorage.getItem("studentName") || "John Doe"; // Replace with actual backend call
+            document.getElementById("studentName").textContent = studentName;
+        }
+
+        function startQuiz(title, deadline) {
+            const now = new Date();
+            const quizDeadline = new Date(deadline);
+
+            if (now > quizDeadline) {
+                alert("The deadline for this quiz has passed!");
+                return;
+            }
+
+            document.getElementById("quizTitle").textContent = title;
+            document.getElementById("quizModal").classList.remove("hidden");
+
+            const timeLeft = (quizDeadline - now) / 1000;
+            startTimer(timeLeft);
+        }
+
+        function closeQuiz() {
+            document.getElementById("quizModal").classList.add("hidden");
+            clearInterval(countdown);
+        }
+
+        function startTimer(duration) {
+            let timeLeft = duration;
+            const timerElement = document.getElementById("timer");
+
+            countdown = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = Math.floor(timeLeft % 60);
+                timerElement.textContent = Time left: ${minutes}m ${seconds}s;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    submitQuiz();
+                }
+
+                timeLeft--;
+            }, 1000);
+        }
+        function startQuiz(title, deadline) {
+    const quizId = encodeURIComponent(title); // You can modify this logic for actual quiz IDs
+    window.location.href = a_quiz.html=${quizId};
+}
+
+        function submitQuiz() {
+            alert("Quiz submitted! Your score will be displayed soon.");
+            closeQuiz();
+        }
+
+        function logout() {
+            localStorage.removeItem("studentName");
+            alert("Logged out successfully!");
+            window.location.href = "home.html"; // Redirect to login page
+        }
+
+        // Load student name on page load
+        document.addEventListener("DOMContentLoaded", loadStudentName);
+    </script>
+</body>
+</html>
