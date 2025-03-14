@@ -11,15 +11,15 @@
 
         /* Custom Cursor */
         .cursor {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid white;
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
-        }
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border: 2px solid white;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: left 0.05s linear, top 0.05s linear;
+    }
 
         /* Background Animation */
         .background-animate {
@@ -109,9 +109,9 @@
     <nav class="navbar">
         <h1 class="logo">Quiz Management</h1>
         <div class="nav-links">
-            <a href="/" class="nav-item">Home</a>
+            <a href="home.html" class="nav-item">Home</a>
             <a href="faculty-login.html" class="nav-item">Faculty</a>
-            <a href="admin-login.html" class="nav-item">Admin</a>
+            <a href="adminlog.html" class="nav-item">Admin</a>
             <a href="student-login.html" class="nav-item">Student</a>
             <a href="contact.html" class="nav-item">Contact Us</a>
         </div>
@@ -121,11 +121,11 @@
     <section class="contact-section">
         <div class="contact-container">
             <h2>Contact Us</h2>
-            <form action="https://api.web3forms.com/submit" method="POST" id="contact-form">
+            <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
                 <input type="hidden" name="access_key" value="9751b6a2-f8dd-4c84-8849-89fdf34d83a6">
-                <input type="text" class="input-field" placeholder="Your Name" required>
-                <input type="email" class="input-field" placeholder="Your Email" required>
-                <textarea class="input-field" placeholder="Your Message" rows="3" required></textarea>
+                <input type="text" class="input-field" name="name" placeholder="Your Name" required>
+                <input type="email" class="input-field" name="email" placeholder="Your Email" required>
+                <textarea class="input-field" name="message" placeholder="Your Message" rows="3" required></textarea>
                 <button type="submit" class="submit-button">Send Message</button>
             </form>
         </div>
@@ -137,12 +137,13 @@
     </footer>
 
     <script>
-        // Cursor Effect
-        const cursor = document.querySelector(".cursor");
-        document.addEventListener("mousemove", (e) => {
+        const cursor = document.querySelector('.cursor');
+    
+        document.addEventListener('mousemove', (e) => {
             cursor.style.left = `${e.clientX}px`;
             cursor.style.top = `${e.clientY}px`;
         });
     </script>
+    
 </body>
 </html>

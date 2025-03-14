@@ -3,18 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Login & Signup</title>
+    <title>Faculty Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; flex-direction: column; height: 100vh; overflow: hidden; cursor: none; }
- /* Navbar */
- .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 10px; margin: 20px; }
+        body { 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+    justify-content: center; 
+    align-items: center; 
+    background: #0f172a; 
+    color: white; 
+}
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 10px; margin: 20px; }
         .logo { font-size: 22px; font-weight: bold; color: #ffcc00; transition: 0.3s; }
         .logo:hover { text-shadow: 0 0 10px #ffcc00; }
         .nav-links { display: flex; gap: 15px; }
         .nav-item { color: white; text-decoration: none; transition: 0.3s; font-size: 16px; }
         .nav-item:hover { color: #ffcc00; }
+
         /* Navigation Bar */
         .navbar { 
             width: 100%; 
@@ -46,10 +55,10 @@
     backdrop-filter: blur(10px); 
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); 
     text-align: center; 
-    margin-top: 160px; /* Increased margin to prevent overlap */
+    margin-top: 120px; /* Adjusted to prevent overlap */
+    margin-bottom: auto; /* Push footer down */
+    flex-grow: 1; 
 }
-
-
 
         h2 { margin-bottom: 20px; }
         .input-group { margin-bottom: 15px; text-align: left; }
@@ -68,7 +77,21 @@
             margin-top: 10px; 
         }
         .btn:hover { background: white; }
-        footer { text-align: center; padding: 20px; width:100%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+
+        /* Space before footer */
+        .spacer { height: 50px; } /* Adjust height for more or less space */
+
+        footer {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    padding: 15px;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    font-size: 14px;
+}
         
         .switch, a { color: #ffcc00; text-decoration: none; font-size: 12px; display: block; margin-top: 10px; cursor: pointer; }
         .hidden { display: none; }
@@ -82,7 +105,7 @@
         <div class="nav-links">
             <a href="home.html" class="nav-item">Home</a>
             <a href="faculty-login.html" class="nav-item">Faculty</a>
-            <a href="admin-login.html" class="nav-item">Admin</a>
+            <a href="adminlog.html" class="nav-item">Admin</a>
             <a href="student-login.html" class="nav-item">Student</a>
             <a href="contact.html" class="nav-item">Contact Us</a>
         </div>
@@ -91,47 +114,33 @@
     <div class="cursor"></div>
     
     <div class="container">
-        <div id="login-box">
+        <form id="login-box" action="facul.php" method="POST">
             <h2>Faculty Login</h2>
+            
             <div class="input-group">
                 <label>Email ID</label>
-                <input type="email" id="login-email" required>
+                <input type="email" name="email" id="login-email" placeholder="Enter your email" required>
             </div>
+    
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="login-password" required>
+                <input type="password" name="password" id="login-password" placeholder="Enter your password" required>
             </div>
+    
             <a href="ff.html">Forgot Password?</a>
-            <button class="btn" onclick="login()">Login</button>
-            <button class="btn hidden" id="continue-btn">Continue</button>
-            <a class="switch" onclick="toggleForm()">New user? Signup here</a>
-        </div>
-
-        <div id="signup-box" class="hidden">
-            <h2>Faculty Signup</h2>
-            <div class="input-group">
-                <label>Name</label>
-                <input type="text" id="signup-name" required>
-            </div>
-            <div class="input-group">
-                <label>Email ID</label>
-                <input type="email" id="signup-email" required>
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="signup-password" required>
-            </div>
-            <div class="input-group">
-                <label>Favorite Color</label>
-                <input type="text" id="signup-color" required>
-            </div>
-            <button class="btn" onclick="signup()">Signup</button>
-            <a onclick="toggleForm()">Already have an account? Login</a>
-        </div>
-        
+    
+            <button class="btn" type="submit" name="login">Login</button>
+    
+            <a href="fsignup.html">New user? Signup here</a>
+        </form>
     </div>
-    <br>
-    <footer id="contact">
+    
+    
+
+    <!-- Space before footer -->
+    <div class="spacer"></div>
+
+    <footer>
         <p>Contact Us: quizmanagement@example.com</p>
     </footer>
 
@@ -180,14 +189,11 @@
 
         function checkLogin() {
             const isLoggedIn = localStorage.getItem("isLoggedIn");
-            const continueBtn = document.getElementById("continue-btn");
-            if (continueBtn) {
-                continueBtn.style.display = isLoggedIn === "true" ? "block" : "none";
-            }
+            document.getElementById("continue-btn").style.display = isLoggedIn === "true" ? "block" : "none";
         }
 
         checkLogin();
-</script>
+    </script>
 
 </body>
 </html>
