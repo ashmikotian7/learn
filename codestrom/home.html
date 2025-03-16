@@ -6,130 +6,211 @@
     <title>Quiz Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #0f172a; color: white; overflow-x: hidden; position: relative; }
-
-        /* Cursor Effect */
-        .cursor { position: absolute; width: 30px; height: 30px; border: 2px solid white; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); transition: transform 0.1s; }
-
-        .slideshow-container {
-    position: relative;
-    width: 100%;
-    max-width: 600px; /* Adjust as needed */
-    margin: auto; /* Centers the slideshow */
-    overflow: hidden;
-}
-
-.slides {
-    display: none; /* Initially hide all images */
-    width: 100%;
-    max-height: 400px; /* Adjust height as needed */
-    object-fit: contain; /* Ensures the entire image is visible */
-}
-
-/* Center the images */
-.slideshow-container img {
-    display: block;
-    margin: auto;
-}
-
-/* Fade Animation */
-@keyframes fade {
-    from { opacity: 0.4; }
-    to { opacity: 1; }
-}
-
-.active {
-    display: block; /* Show the active slide */
-    animation: fade 1.5s ease-in-out;
-}
-
-        /* Animated Background */
-        .background-animate {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle, rgba(0,0,0,0.6), rgba(15, 23, 42, 0.9));
-            animation: backgroundFade 10s infinite alternate;
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif; 
         }
-        @keyframes backgroundFade {
-            0% { background: radial-gradient(circle, rgba(0,0,0,0.6), rgba(15, 23, 42, 0.9)); }
-            100% { background: radial-gradient(circle, rgba(0,0,0,0.8), rgba(15, 23, 42, 1)); }
+        
+        body { 
+            background: linear-gradient(135deg, #0f172a, #1e293b); 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
         }
+        
+            @keyframes appear {
+    from { 
+        opacity: 0; 
+        transform: translateX(-100px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0px);
+    }
+}
+
+.block {
+    animation: appear 1s ease-out forwards; /* Animation will run for 1s with ease effect */
+    opacity: 0; /* Start as invisible */
+}
 
         /* Navbar */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
-        .logo { font-size: 24px; font-weight: bold; color: #ffcc00; transition: 0.3s; }
-        .logo:hover { text-shadow: 0 0 10px #ffcc00; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-item { color: white; text-decoration: none; transition: 0.3s; }
-        .nav-item:hover { color: #ffcc00; }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 100px 20px;
-            animation: fadeIn 2s ease-in-out;
+        .navbar { 
+            width: 100%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 40px; 
+            background: rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px); 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            z-index: 1000; 
         }
-        .hero h2 {
-            font-size: 32px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            animation: glow 2s infinite alternate;
-        }
-        .fade-in { opacity: 0; animation: fadeIn 2s forwards; }
-        .cta-button {
-            background: #ffcc00;
-            color: black;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
+        .logo {
+            font-size: 22px;
             font-weight: bold;
-            display: inline-block;
+            color: #ffcc00;
             transition: 0.3s;
-            animation: pulse 2s infinite;
+        }
+        .logo:hover { text-shadow: 0 0 10px #ffcc00; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffcc00;
+        }
+        .about-container {
+            max-width: 800px;
+            padding: 30px;
+            border: 2px solid white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: justify;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #ffcc00;
+            font-family:'Trebuchet MS', sans-serif;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        /* Hero Section */
+        .hero { 
+            text-align: center; 
+            margin-top: 100px; 
+            
+        }
+        .hero h2 { font-size: 32px; font-weight: 600; }
+        .cta-button { 
+            background: #ffcc00; 
+            color: black; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            display: inline-block; 
+            margin-top: 15px; 
         }
         .cta-button:hover { background: white; }
 
         /* Slideshow */
         .slideshow-container {
             position: relative;
-            max-width: 50%; /* Reduce max-width to make images smaller */
-            margin: auto;
+            width: 50%;
+            max-width: 400px;
             text-align: center;
+            border-radius: 10px;
             overflow: hidden;
+            margin-top: 20px;
         }
-
         .slides {
-            width: 80%; /* Adjust the width to make them smaller */
-            height: auto;
-            max-height: 200px; /* Set a maximum height */
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
             border-radius: 10px;
             display: none;
-            animation: fadeSlide 1.5s ease-in-out;
+            border: 3px solid #ffcc00;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
         }
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: scale(0.9); }
+        .active-slide { display: block; animation: fadeIn 1s ease-in-out; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
+        .content-containe {
+            position: relative;
+            width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
 
+        /* Left-side Image */
+        .side-image {
+            width: 250px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 10px 10px 20px rgba(241, 238, 236, 0.5);
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 1s ease-in-out;
+        }
+
+        /* Right-side Quote Box */
+        .quote-box {
+            background: rgba(236, 234, 233, 0.8);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 5px 5px 15px rgba(248, 243, 239, 0.5);
+            text-align: center;
+            width: 60%;
+            font-size: 18px;
+            font-style: italic;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 1s ease-in-out;
+        }
+
+        .quote-box::before {
+            content: "“";
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .quote-box::after {
+            content: "”";
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Scroll Animation */
+        .visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
         /* Footer */
-        footer { text-align: center; padding: 20px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
-
-        /* Keyframe Animations */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes glow { 0% { text-shadow: 0 0 15px rgba(255, 255, 255, 0.7); } 100% { text-shadow: 0 0 25px rgba(255, 255, 255, 1); } }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        footer {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            bottom: 0;
+            left: 0;
+            font-size: 14px;
+            margin-top: auto;
+        }
     </style>
 </head>
 <body>
-    <div class="cursor"></div>
-    <div class="background-animate"></div>
-
-    <!-- Navbar -->
     <nav class="navbar">
         <h1 class="logo">Quiz Management</h1>
         <div class="nav-links">
@@ -140,37 +221,100 @@
             <a href="contact.html" class="nav-item">Contact Us</a>
         </div>
     </nav>
-
-    <!-- Hero Section -->
+    
     <section class="hero">
-        <h2 class="glow">Enhance Your Knowledge with Interactive Quizzes</h2>
-        <p class="fade-in">Join us and test your skills!</p>
+        <br>
+        <br>
+        <br>
+        <h1 style="font-family: 'Brush Script MT', cursive ; font-size: 50px;" >Enhance Your Knowledge with Interactive Quizzes</h1>
+        <p>Join us and test your skills!</p>
+        <br>
         <a href="student-login.html" class="cta-button">Start Now</a>
     </section>
 
-    <!-- Slideshow -->
     <section class="slideshow-container">
-        <img class="slides" src="image1.jpg" alt="Quiz Image 1">
+        <br>
+        <img class="slides active-slide" src="image1.jpg" alt="Quiz Image 1">
         <img class="slides" src="image2.jpg" alt="Quiz Image 2">
         <img class="slides" src="image3.jpg" alt="Quiz Image 3">
     </section>
-<br>
-    <!-- Footer -->
-    <footer id="contact">
-        <p>Contact Us: quizmanagement@example.com</p>
+    <br>
+    
+    <div class="quote-box" id="quote">
+            "A quiz is not just a test of knowledge but a challenge to curiosity and intelligence!"
+        </div>
+    <br>
+    <div class="about-container">
+        <br>
+        <h2>About Quiz Management System</h2>
+        <p>
+            A <b>Quiz Management System</b> is an online platform designed to create, conduct, and manage quizzes efficiently. 
+            It eliminates the need for paper-based exams and provides a digital solution for students and faculty. 
+            This system enables faculty to create quizzes with multiple-choice questions, True/False questions. Students can attempt quizzes in real-time, with automated grading.
+        </p>
+        <p>
+            The system is built with a user-friendly interface and a secure authentication mechanism. 
+            It supports different user roles, including students, faculty, and administrators. Faculty members 
+            can create and schedule quizzes, while students can take quizzes with ease. The administrator 
+            oversees the entire platform, ensuring smooth operation and security.
+        </p>
+        <p>
+            Key features of the Quiz Management System include automatic grading, time-bound quizzes, question randomization, 
+            and performance tracking. It enhances learning by making assessments more interactive and accessible. 
+        </p>
+    </div>
+    <br>
+    
+    <footer>
+        <p>Contact Us: quizmanagement@sode-edu.com</p>
     </footer>
 
     <script>
         let slideIndex = 0;
         function showSlides() {
             let slides = document.getElementsByClassName("slides");
-            for (let i = 0; i < slides.length; i++) { slides[i].style.display = "none"; }
+            for (let i = 0; i < slides.length; i++) { slides[i].classList.remove("active-slide"); }
             slideIndex++;
             if (slideIndex > slides.length) { slideIndex = 1; }
-            slides[slideIndex - 1].style.display = "block";
+            slides[slideIndex - 1].classList.add("active-slide");
             setTimeout(showSlides, 3000);
         }
         showSlides();
+        document.addEventListener("DOMContentLoaded", function () {
+    let blocks = document.querySelectorAll(".block");
+
+    let observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = "appear 1s ease-out forwards";
+                }
+            });
+        },
+        { threshold: 0.4 } // When 40% of the element is visible
+    );
+
+    blocks.forEach((block) => observer.observe(block));
+});
+document.addEventListener("DOMContentLoaded", function () {
+            let image = document.getElementById("image");
+            let quote = document.getElementById("quote");
+
+            let observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("visible");
+                        }
+                    });
+                },
+                { threshold: 0.5 } // Trigger animation when 50% visible
+            );
+
+            observer.observe(image);
+            observer.observe(quote);
+        });
+
     </script>
 </body>
 </html>

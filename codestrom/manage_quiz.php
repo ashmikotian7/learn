@@ -1,9 +1,34 @@
+<?php
+session_start();
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "quiz_management";
+
+// Connect to database
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch quizzes from database
+$quizQuery = "SELECT id, faculty_name, title, deadline_date, deadline_time FROM quizzes";
+$quizResult = $conn->query($quizQuery);
+
+$quizzes = [];
+while ($row = $quizResult->fetch_assoc()) {
+    $quizzes[] = $row;
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
+    <title>Manage Quizzes</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * { 
@@ -14,21 +39,26 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             text-align: center;
-            padding: 15px;
+            padding: 20px;
             color: white;
         }
         .container {
             width: 100%;
             max-width: 500px;
-            padding: 25px;
+            padding: 20px;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(15px);
             border-radius: 12px;
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .container:hover {
             transform: scale(1.02);
@@ -36,25 +66,19 @@
         h2 {
             font-size: 24px;
             font-weight: 600;
-            margin-bottom: 20px;
             color: #ffcc00;
             text-shadow: 2px 2px 10px rgba(255, 204, 0, 0.6);
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            outline: none;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         .btn {
             display: block;
             width: 100%;
             padding: 14px;
-            margin: 10px 0;
             background: linear-gradient(135deg, #ffcc00, #ff9900);
             color: white;
             text-decoration: none;
@@ -72,10 +96,11 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
-        .user-list {
-            margin-top: 20px;
+        .quiz-list {
+            margin-top: 10px;
+            flex-grow: 1;
         }
-        .user-item {
+        .quiz-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -109,62 +134,47 @@
 </head>
 <body>
     <div class="container">
-        <h2>Manage Teachers & Students</h2>
-        <input type="email" id="email" placeholder="Enter Email (@sode-edu.in)">
-        <select id="role">
-            <option value="Teacher">Teacher</option>
-            <option value="Student">Student</option>
-        </select>
-        <button class="btn" onclick="addUser()">Add User</button>
-
-        <h3>Registered Users</h3>
-        <div id="userList" class="user-list"></div>
-
-        <button class="btn" onclick="goToDashboard()">Back to Admin Dashboard</button>
+        <h2>Manage Quizzes</h2>
+        <div id="quizList" class="quiz-list">
+            <?php if (empty($quizzes)) { ?>
+                <p>No quizzes available.</p>
+            <?php } else { 
+                foreach ($quizzes as $quiz) { 
+                    $formattedDeadline = date("D, F j, Y - g:i A", strtotime($quiz['deadline_date'] . ' ' . $quiz['deadline_time']));
+            ?>
+                <div class="quiz-item">
+                    <span>
+                        <?= htmlspecialchars($quiz['title']) ?> - 
+                        <strong><?= htmlspecialchars($quiz['faculty_name']) ?></strong> -
+                        Deadline: <?= $formattedDeadline ?>
+                    </span> 
+                    <button class="delete-btn" onclick="deleteQuiz(<?= $quiz['id'] ?>)">Delete</button>
+                </div>
+            <?php } } ?>
+        </div>
+        <button class="btn" onclick="goToDashboard()">Go Back to Admin Dashboard</button>
     </div>
 
     <script>
-        function addUser() {
-            let email = document.getElementById("email").value.trim();
-            let role = document.getElementById("role").value;
-
-            if (!email.endsWith("@sode-edu.in")) {
-                alert("Please enter a valid email ending with @sode-edu.in");
-                return;
+        function deleteQuiz(quizId) {
+            if (confirm("Are you sure you want to delete this quiz?")) {
+                fetch('delete_quiz.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'quiz_id=' + quizId
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    location.reload();
+                })
+                .catch(error => console.error('Error:', error));
             }
-
-            let users = JSON.parse(localStorage.getItem("users")) || [];
-            users.push({ email, role });
-            localStorage.setItem("users", JSON.stringify(users));
-            loadUsers();
-        }
-
-        function loadUsers() {
-            let users = JSON.parse(localStorage.getItem("users")) || [];
-            let userList = document.getElementById("userList");
-
-            userList.innerHTML = users.length 
-                ? users.map((user, index) => `
-                    <div class="user-item">
-                        <span>${user.email} - ${user.role}</span>
-                        <button class="delete-btn" onclick="deleteUser(${index})">Delete</button>
-                    </div>
-                `).join("") 
-                : "<p>No users registered.</p>";
-        }
-
-        function deleteUser(index) {
-            let users = JSON.parse(localStorage.getItem("users")) || [];
-            users.splice(index, 1);
-            localStorage.setItem("users", JSON.stringify(users));
-            loadUsers();
         }
 
         function goToDashboard() {
             window.location.href = "admin_dashboard.html"; 
         }
-
-        window.onload = loadUsers;
     </script>
 </body>
 </html>

@@ -143,7 +143,7 @@
     <nav class="navbar">
         <h1 class="logo">Quiz Management</h1>
         <div class="nav-links">
-            <a href="index.html" class="nav-item">Home</a>
+            <a href="home.html" class="nav-item">Home</a>
             <a href="faculty-login.html" class="nav-item">Faculty</a>
             <a href="adminlog.html" class="nav-item">Admin</a>
             <a href="student-login.html" class="nav-item">Student</a>
@@ -152,29 +152,25 @@
     </nav>
     
     <!-- Forgot Password Section -->
+    
     <div class="container">
-        <h2>Forgot Password</h2>
-        <p>Enter your email address to reset your password.</p>
-        <form action="ff.php" method="POST">
+        <h2>Reset Password</h2>
+        <p>Enter your new password.</p>
+        <form action="aupdate_password.php" method="POST">
             <div class="input-group">
-                <label for="reset-email">Email ID</label>
-                <input type="email" name="email" id="reset-email" required>
+                <label for="password">New Password</label>
+                <input type="password" name="password" id="password" required>
             </div>
-            <button type="submit" class="btn">Submit</button>
+            <div class="input-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" name="confirm_password" id="confirm_password" required>
+            </div>
+            <button type="submit" class="btn">Update Password</button>
         </form>
-        <a href="faculty-login.html">Back to Login</a>
     </div>
+
     
 
-    <script>
-        function resetPassword() {
-            const email = document.getElementById("reset-email").value;
-            if (email) {
-                alert("If this email is registered, you'll receive a password reset link.");
-            } else {
-                alert("Please enter your email.");
-            }
-        }
-    </script>
+    
 </body>
 </html>

@@ -155,12 +155,14 @@
     <div class="container">
         <h2>Forgot Password</h2>
         <p>Enter your email address to reset your password.</p>
-        <div class="input-group">
-            <label>Email ID</label>
-            <input type="email" id="reset-email" required>
-        </div>
-        <button class="btn" onclick="resetPassword()">Submit</button>
-        <a href="faculty-login.html">Back to Login</a>
+        <form action="sf.php" method="POST">
+            <div class="input-group">
+                <label>Email ID</label>
+                <input type="email" name="email" required>
+            </div>
+            <button class="btn" type="submit">Submit</button>
+        </form>
+        <a href="studnet-login.html">Back to Login</a>
     </div>
 
     <script>

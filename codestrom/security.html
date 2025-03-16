@@ -6,51 +6,91 @@
     <title>Quiz Security</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #0f172a; color: white; text-align: center; padding: 20px; }
-
-        .container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-        h2 { color: #ffcc00; }
-        input, button {
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+        .container {
             width: 100%;
-            padding: 10px;
+            max-width: 500px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ffcc00;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
             margin: 10px 0;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
         }
-        input { background: white; color: black; }
         .btn {
-            background: #ffcc00;
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
             color: black;
             font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
-            transition: 0.3s;
         }
-        .btn:hover { background: #e6b800; }
-        .access-list { 
-            margin-top: 20px; 
-            text-align: left; 
-            padding: 10px; 
-            background: rgba(255, 255, 255, 0.2); 
-            border-radius: 5px; 
+        .access-list {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            text-align: left;
+        }
+        .access-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
         }
         .back-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
             background: #ff5733;
             color: white;
             font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
         }
-        .back-btn:hover { background: #cc4625; }
     </style>
 </head>
 <body>
@@ -60,52 +100,62 @@
         <input type="text" id="quizTitle" placeholder="Enter Quiz Title">
         <button class="btn" onclick="grantAccess()">Grant Access</button>
         <div class="access-list" id="accessList">No access records.</div>
-        <button class="btn back-btn" onclick="clearAccessList()">Clear Access Records</button>
-        <button class="btn" type="submit" name="login" onclick="location.href='admin_dashboard.html'">Back To Dashboard</button>
+        <button class="back-btn" onclick="goBack()">Back to Admin Dashboard</button>
     </div>
 
     <script>
         function grantAccess() {
             let student = document.getElementById("studentName").value.trim();
             let quiz = document.getElementById("quizTitle").value.trim();
-            
             if (!student || !quiz) {
-                alert("❌ Please enter both student name and quiz title.");
+                alert("Please enter both student name and quiz title.");
                 return;
             }
             
             let attempts = JSON.parse(localStorage.getItem("attempts")) || {};
-            
             if (attempts[student] && attempts[student][quiz]) {
-                alert("❌ Access Denied: Multiple attempts are restricted!");
+                alert("Access Denied: Multiple attempts are restricted!");
                 return;
             }
             
-            // Granting access
             if (!attempts[student]) attempts[student] = {};
             attempts[student][quiz] = true;
             localStorage.setItem("attempts", JSON.stringify(attempts));
-
-            alert(`✅ Access granted to ${student} for quiz: ${quiz}`);
             loadAccessList();
+        }
+
+        function deleteAccess(student, quiz) {
+            let attempts = JSON.parse(localStorage.getItem("attempts")) || {};
+            if (attempts[student] && attempts[student][quiz]) {
+                delete attempts[student][quiz];
+                if (Object.keys(attempts[student]).length === 0) {
+                    delete attempts[student];
+                }
+                localStorage.setItem("attempts", JSON.stringify(attempts));
+                loadAccessList();
+            }
         }
 
         function loadAccessList() {
             let attempts = JSON.parse(localStorage.getItem("attempts")) || {};
             let accessList = document.getElementById("accessList");
             
-            let listHTML = Object.keys(attempts).map(student => 
-                `<p><strong>${student}</strong> - Attempted quizzes: ${Object.keys(attempts[student]).join(", ")}</p>`
-            ).join("") || "No access records.";
+            let listHTML = Object.keys(attempts).length 
+                ? Object.keys(attempts).map(student => 
+                    Object.keys(attempts[student]).map(quiz => 
+                        `<div class='access-item'>
+                            <span><strong>${student}</strong> - ${quiz}</span>
+                            <button class='delete-btn' onclick='deleteAccess("${student}", "${quiz}")'>Delete</button>
+                        </div>`
+                    ).join("")
+                  ).join("")
+                : "<p>No access records.</p>";
             
             accessList.innerHTML = listHTML;
         }
 
-        function clearAccessList() {
-            if (confirm("Are you sure you want to clear all access records?")) {
-                localStorage.removeItem("attempts");
-                loadAccessList();
-            }
+        function goBack() {
+            window.location.href = "admin_dashboard.html";
         }
 
         window.onload = loadAccessList;
